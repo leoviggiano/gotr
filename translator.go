@@ -5,8 +5,8 @@ import (
 	"errors"
 	"os"
 
-	"translator/internal/parser"
-	"translator/internal/scanner"
+	"github.com/leoviggiano/translator/internal/parser"
+	"github.com/leoviggiano/translator/internal/scanner"
 )
 
 type Translator struct {
