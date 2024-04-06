@@ -1,5 +1,8 @@
 # Translator
 
+[![workflow](https://github.com/leoviggiano/translator/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/leoviggiano/translator/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/leoviggiano/translator/graph/badge.svg?token=KUC1RFVHET)](https://codecov.io/gh/leoviggiano/translator)
+
 This library provides functionality for translation in Go, similar to i18n. It allows you to manage translation files in JSON format and easily retrieve translated texts within your Go applications.
 
 ## JSON Translation Template
@@ -46,6 +49,13 @@ Translation files follow a JSON structure as shown below:
         }
     }
 }
+```
+
+## Installation
+To install Translator, use `go get`:
+
+```sh
+go get github.com/leoviggiano/translator
 ```
 
 ## How to Use
@@ -115,12 +125,6 @@ nonExistentText := translator.Args{
 fmt.Println(translator.Get(argsPTText)) // John tem 10 Armaduras.
 fmt.Println(translator.Get(argsPTJSONPath)) // John não tem Armadura.
 fmt.Println(translator.Get(nonExistentText)) // John has 3 Apples
-```
-## Installation
-To install Translator, use `go get`:
-
-```sh
-go get github.com/leoviggiano/translator
 ```
 
 ## Notes
