@@ -1,0 +1,38 @@
+{
+    "hello_world": "Hello World",
+    "hello_world2": "Hello World 2",
+    "texts": {
+        "welcome": "Welcome to my game!",
+        "goodbye": "Goodbye!"
+    },
+    "items": {
+        "equipments": {
+            "armor": {
+                "description": "Armor text",
+                "singular": "{{.Name}} has {{.Count}} Armor.",
+                "plural": "{{.Name}} has {{.Count}} Armors.",
+                "none": "{{.Name}} has no Armor."
+            },
+            "gloves": {
+                "description": "Gloves text",
+                "singular": "{{.Name}} has {{.Count}} Gloves.",
+                "plural": "{{.Name}} has {{.Count}} Gloves.",
+                "none": "{{.Name}} has no Gloves."
+            }
+        },
+        "consumables": {
+            "health-potion": {
+                "description": "Health Potion text",
+                "singular": "{{.Name}} has {{.Count}} Health Potion.",
+                "plural": "{{.Name}} has {{.Count}} Health Potions.",
+                "none": "{{.Name}} has no Health Potions."
+            },
+            "mana-potion": {
+                "description": "Mana Potion text",
+                "singular": "{{.Name}} has {{.Count}} Mana Potion.",
+                "plural": "{{.Name}} has {{.Count}} Mana Potion.",
+                "none": "{{.Name}} has no Mana Potion."
+            }
+        }
+    }
+}

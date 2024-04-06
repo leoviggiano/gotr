@@ -1,0 +1,11 @@
+{
+    "test": true,
+    "test2": {
+        "test": true
+    },
+    "test3": {
+        "test2": {
+            "test": true
+        }
+    }
+}

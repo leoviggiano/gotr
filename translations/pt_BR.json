@@ -1,0 +1,31 @@
+{
+    "hello_world": "Olá Mundo",
+    "texts": {
+        "welcome": "Bem-vindo ao meu jogo!",
+        "goodbye": "Até logo!"
+    },
+    "items": {
+        "equipments": {
+            "armor": {
+                "description": "Armadura text",
+                "singular": "{{.Name}} tem {{.Count}} Armadura.",
+                "plural": "{{.Name}} tem {{.Count}} Armaduras.",
+                "none": "{{.Name}} não tem Armadura."
+            }
+        },
+        "consumables": {
+            "health-potion": {
+                "description": "Poção de vida text",
+                "singular": "{{.Name}} tem {{.Count}} Poção de vida.",
+                "plural": "{{.Name}} tem {{.Count}} Poções de vida.",
+                "none": "{{.Name}} não tem nenhuma Poção de vida."
+            },
+            "mana-potion": {
+                "description": "Poção de mana text",
+                "singular": "{{.Name}} tem {{.Count}} Poção de mana.",
+                "plural": "{{.Name}} tem {{.Count}} Poções de mana.",
+                "none": "{{.Name}} não tem nenhuma Poção de mana."
+            }
+        }
+    }
+}
