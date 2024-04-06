@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Tests and Lint
+    name: testing and linting
     steps:
       - uses: actions/checkout@v4
 

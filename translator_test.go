@@ -96,7 +96,8 @@ func TestTranslator_Get(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	translator.Register("pt", "./translations/pt_BR.json")
+	err = translator.Register("pt", "./translations/pt_BR.json")
+	require.NoError(t, err)
 
 	tt := []struct {
 		name       string
@@ -135,8 +136,11 @@ func TestTranslator_defaultGet(t *testing.T) {
 		templates:         make(map[string]map[string]template),
 	}
 
-	translator.Register("en", "./translations/en_US.json")
-	translator.Register("pt", "./translations/pt_BR.json")
+	err := translator.Register("en", "./translations/en_US.json")
+	require.NoError(t, err)
+
+	err = translator.Register("pt", "./translations/pt_BR.json")
+	require.NoError(t, err)
 
 	tt := []struct {
 		name              string
