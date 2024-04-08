@@ -1,4 +1,4 @@
-package main
+package gotr
 
 import (
 	"encoding/json"

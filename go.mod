@@ -1,4 +1,4 @@
-module github.com/leoviggiano/translator
+module github.com/leoviggiano/gotr
 
 go 1.22.1
 

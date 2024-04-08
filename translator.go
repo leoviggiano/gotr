@@ -1,12 +1,12 @@
-package main
+package gotr
 
 import (
 	"encoding/json"
 	"errors"
 	"os"
 
-	"github.com/leoviggiano/translator/internal/parser"
-	"github.com/leoviggiano/translator/internal/scanner"
+	"github.com/leoviggiano/gotr/internal/parser"
+	"github.com/leoviggiano/gotr/internal/scanner"
 )
 
 type Translator struct {
