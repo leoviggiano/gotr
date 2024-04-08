@@ -1,7 +1,7 @@
-# Translator
+# GOTR
 
-[![workflow](https://github.com/leoviggiano/translator/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/leoviggiano/translator/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/leoviggiano/translator/graph/badge.svg?token=KUC1RFVHET)](https://codecov.io/gh/leoviggiano/translator)
+[![workflow](https://github.com/leoviggiano/gotr/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/leoviggiano/gotr/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/leoviggiano/gotr/graph/badge.svg?token=KUC1RFVHET)](https://codecov.io/gh/leoviggiano/gotr)
 
 This library provides functionality for translation in Go, similar to i18n. It allows you to manage translation files in JSON format and easily retrieve translated texts within your Go applications.
 
@@ -52,10 +52,10 @@ Translation files follow a JSON structure as shown below:
 ```
 
 ## Installation
-To install Translator, use `go get`:
+To install `gotr`, use `go get`:
 
 ```sh
-go get github.com/leoviggiano/translator
+go get github.com/leoviggiano/gotr
 ```
 
 ## How to Use
@@ -63,14 +63,14 @@ go get github.com/leoviggiano/translator
 1. **Import the Library:**
 
 ```go
-import "github.com/leoviggiano/translator"
+import "github.com/leoviggiano/gotr"
 ```
 
 2. **Create a New Translator Instance:**
 
 ```go
-translator, err := translator.NewTranslator(
-    translator.WithDefault("en", "./translations/en_US.json"),
+translator, err := gotr.NewTranslator(
+    translator.WithDefault("en", "path/to/json"),
 )
 if err != nil {
     fmt.Println(err)
@@ -80,7 +80,7 @@ if err != nil {
 3. **Register Additional Translation Files:**
 
 ```go
-translator.Register("pt", "./translations/pt_BR.json")
+translator.Register("pt", "path/to/json")
 ```
 
 4. **Define Arguments for Translation:**
@@ -88,7 +88,7 @@ translator.Register("pt", "./translations/pt_BR.json")
 ```go
 // You can use either the text to translate or the json path
 
-argsPTText := translator.Args{
+argsPTText := gotr.Args{
     Identifier: "pt",
     Localizer:  "{{.Name}} has {{.Count}} Armor.",
     Args: map[string]interface{}{
@@ -98,7 +98,7 @@ argsPTText := translator.Args{
     Count: 10,
 }
 
-argsPTJSONPath := translator.Args{
+argsPTJSONPath := gotr.Args{
     Identifier: "pt",
     Localizer:  "items.equipments.armor",
     Args: map[string]interface{}{
@@ -108,7 +108,7 @@ argsPTJSONPath := translator.Args{
 }
 
 // When the translation does not exist on your template, it'll just replace the variables
-nonExistentText := translator.Args{
+nonExistentText := gotr.Args{
     Identifier: "pt",
     Localizer:  "{{.Name}} has {{.Count}} Apples",
     Args: map[string]interface{}{
