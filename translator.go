@@ -19,13 +19,13 @@ type translator struct {
 	templates         map[string]map[string]template
 }
 
-type Option func(*translator) error
+type option func(*translator) error
 
 var (
 	errDefaultAlreadyRegistered = errors.New("default identifier already registered")
 )
 
-func WithDefault(identifier, jsonPath string) Option {
+func WithDefault(identifier, jsonPath string) option {
 	return func(t *translator) error {
 		if t.defaultIdentifier != "" {
 			return errDefaultAlreadyRegistered
@@ -36,7 +36,7 @@ func WithDefault(identifier, jsonPath string) Option {
 	}
 }
 
-func NewTranslator(options ...Option) (Translator, error) {
+func NewTranslator(options ...option) (Translator, error) {
 	t := &translator{
 		templates: make(map[string]map[string]template),
 	}
