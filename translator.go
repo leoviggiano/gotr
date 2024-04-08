@@ -9,19 +9,24 @@ import (
 	"github.com/leoviggiano/gotr/internal/scanner"
 )
 
-type Translator struct {
+type Translator interface {
+	Register(identifier, jsonPath string) error
+	Get(args Args) string
+}
+
+type translator struct {
 	defaultIdentifier string
 	templates         map[string]map[string]template
 }
 
-type Option func(*Translator) error
+type Option func(*translator) error
 
 var (
 	errDefaultAlreadyRegistered = errors.New("default identifier already registered")
 )
 
 func WithDefault(identifier, jsonPath string) Option {
-	return func(t *Translator) error {
+	return func(t *translator) error {
 		if t.defaultIdentifier != "" {
 			return errDefaultAlreadyRegistered
 		}
@@ -31,8 +36,8 @@ func WithDefault(identifier, jsonPath string) Option {
 	}
 }
 
-func NewTranslator(options ...Option) (*Translator, error) {
-	t := &Translator{
+func NewTranslator(options ...Option) (Translator, error) {
+	t := &translator{
 		templates: make(map[string]map[string]template),
 	}
 
@@ -46,7 +51,7 @@ func NewTranslator(options ...Option) (*Translator, error) {
 	return t, nil
 }
 
-func (t *Translator) Register(identifier, jsonPath string) error {
+func (t *translator) Register(identifier, jsonPath string) error {
 	file, err := os.ReadFile(jsonPath)
 	if err != nil {
 		return err
@@ -89,7 +94,7 @@ func (t *Translator) Register(identifier, jsonPath string) error {
 }
 
 // Get the translation by the given path or text and identifier.
-func (t *Translator) Get(args Args) string {
+func (t *translator) Get(args Args) string {
 	identifiedTranslator, ok := t.templates[args.Identifier]
 	if !ok {
 		return t.defaultGet(args)
@@ -103,7 +108,7 @@ func (t *Translator) Get(args Args) string {
 	return template.apply(args)
 }
 
-func (t *Translator) defaultGet(args Args) string {
+func (t *translator) defaultGet(args Args) string {
 	identifiedTranslator, ok := t.templates[t.defaultIdentifier]
 	if !ok {
 		return args.apply(args.Localizer)
