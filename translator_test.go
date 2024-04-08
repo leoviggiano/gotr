@@ -8,36 +8,46 @@ import (
 
 func TestNewTranslator(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		translator, err := NewTranslator(
-			WithDefault("en", "./translations/en_US.json"),
-		)
+		translator := &translator{
+			templates: make(map[string]map[string]template),
+		}
+		identifier := "identifier"
+		applyOption := WithDefault(identifier, "./translations/en_US.json")
 
+		err := applyOption(translator)
 		require.NoError(t, err)
 		require.NotNil(t, translator)
-		require.Equal(t, "en", translator.defaultIdentifier)
+		require.Equal(t, identifier, translator.defaultIdentifier)
 	})
 }
 
 func TestTranslator_Register(t *testing.T) {
 	t.Run("success - with default", func(t *testing.T) {
+		translator := &translator{
+			templates: make(map[string]map[string]template),
+		}
 		identifier := "identifier"
-		translator, err := NewTranslator(
-			WithDefault(identifier, "./translations/en_US.json"),
-		)
+		applyOption := WithDefault(identifier, "./translations/en_US.json")
+
+		err := applyOption(translator)
 
 		require.NoError(t, err)
 		require.NotEmpty(t, translator.templates[identifier])
 	})
 
 	t.Run("error - default already registered", func(t *testing.T) {
+		translator := &translator{
+			templates: make(map[string]map[string]template),
+		}
 		identifier := "identifier"
-		translator, err := NewTranslator(
-			WithDefault(identifier, "./translations/en_US.json"),
-			WithDefault(identifier, "./translations/en_US.json"),
-		)
 
+		applyOption := WithDefault(identifier, "./translations/en_US.json")
+
+		err := applyOption(translator)
+		require.NoError(t, err)
+
+		err = applyOption(translator)
 		require.Equal(t, errDefaultAlreadyRegistered, err)
-		require.Nil(t, translator)
 	})
 
 	t.Run("error read file - with default", func(t *testing.T) {
@@ -58,8 +68,13 @@ func TestTranslator_Register(t *testing.T) {
 	})
 
 	t.Run("success", func(t *testing.T) {
+		translator := &translator{
+			templates: make(map[string]map[string]template),
+		}
 		identifier := "identifier"
-		translator, err := NewTranslator()
+		applyOption := WithDefault(identifier, "./translations/en_US.json")
+
+		err := applyOption(translator)
 		require.NoError(t, err)
 
 		err = translator.Register(identifier, "./translations/en_US.json")
@@ -68,23 +83,23 @@ func TestTranslator_Register(t *testing.T) {
 	})
 
 	t.Run("error read file", func(t *testing.T) {
+		translator := &translator{
+			templates: make(map[string]map[string]template),
+		}
 		identifier := "identifier"
 
-		translator, err := NewTranslator()
-		require.NoError(t, err)
-
-		err = translator.Register(identifier, "invalid")
+		err := translator.Register(identifier, "invalid")
 		require.Error(t, err)
 		require.Nil(t, translator.templates[identifier])
 	})
 
 	t.Run("error unmarshal file", func(t *testing.T) {
+		translator := &translator{
+			templates: make(map[string]map[string]template),
+		}
 		identifier := "identifier"
 
-		translator, err := NewTranslator()
-		require.NoError(t, err)
-
-		err = translator.Register(identifier, "./translator_test.go")
+		err := translator.Register(identifier, "./translator_test.go")
 		require.Error(t, err)
 		require.Nil(t, translator.templates[identifier])
 	})
@@ -131,7 +146,7 @@ func TestTranslator_Get(t *testing.T) {
 }
 
 func TestTranslator_defaultGet(t *testing.T) {
-	translator := Translator{
+	translator := translator{
 		defaultIdentifier: "en",
 		templates:         make(map[string]map[string]template),
 	}
