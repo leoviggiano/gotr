@@ -7,7 +7,7 @@
     "items": {
         "equipments": {
             "armor": {
-                "description": "Armadura text",
+                "description": "Armadura texto",
                 "singular": "{{.Name}} tem {{.Count}} Armadura.",
                 "plural": "{{.Name}} tem {{.Count}} Armaduras.",
                 "none": "{{.Name}} não tem Armadura."
