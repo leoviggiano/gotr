@@ -46,6 +46,7 @@ func TestTranslator_Register(t *testing.T) {
 		err := applyOption(translator)
 		require.NoError(t, err)
 
+		translator.defaultIdentifier = "different"
 		err = applyOption(translator)
 		require.Equal(t, errDefaultAlreadyRegistered, err)
 	})

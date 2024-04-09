@@ -22,7 +22,8 @@ func TestScan(t *testing.T) {
 		"test2": {
 			"value": "ok",
 			"test3": {
-				"value": "ok"
+				"value": "ok",
+				"singular": "ok"
 			}
 		}
 	}`)
@@ -30,8 +31,9 @@ func TestScan(t *testing.T) {
 	expected := []string{
 		"value",
 		"test.test1-2.value",
-		"test.test1-2.test3",
+		"test.test1-2.test3.value",
 		"test2.value",
+		"test2.test3",
 		"test2.test3.value",
 	}
 

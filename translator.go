@@ -27,7 +27,7 @@ var (
 
 func WithDefault(identifier, jsonPath string) option {
 	return func(t *translator) error {
-		if t.defaultIdentifier != "" {
+		if t.defaultIdentifier != "" && identifier != t.defaultIdentifier {
 			return errDefaultAlreadyRegistered
 		}
 
@@ -64,7 +64,12 @@ func (t *translator) Register(identifier, jsonPath string) error {
 	}
 
 	jsonTree := scanner.Scan(v)
-	translator := make(map[string]template)
+
+	translator, ok := t.templates[identifier]
+	if !ok {
+		translator = make(map[string]template)
+		t.templates[identifier] = translator
+	}
 
 	for _, path := range jsonTree {
 		k, err := parser.Parse(v, path)
@@ -89,7 +94,6 @@ func (t *translator) Register(identifier, jsonPath string) error {
 		}
 	}
 
-	t.templates[identifier] = translator
 	return nil
 }
 
