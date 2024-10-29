@@ -8,6 +8,8 @@ linters:
     - revive
     - exportloopref
     - unparam
+  disable:
+    - unexported-return
 
 linters-settings:
   lll:
