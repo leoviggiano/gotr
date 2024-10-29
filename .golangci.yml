@@ -6,12 +6,13 @@ linters:
     - lll
     - gofmt
     - revive
+    - exportloopref
     - unparam
 
+issues:
+  exclude:
+    - "unexported-return"
+
 linters-settings:
-  revive:
-    rules:
-      - name: unexported-return
-        severity: ignore
   lll:
     line-length: 180
