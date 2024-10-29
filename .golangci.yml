@@ -10,7 +10,8 @@ linters:
 
 linters-settings:
   revive:
-    disable:
-      - unexported-return
+    rules:
+      - name: unexported-return
+        severity: ignore
   lll:
     line-length: 180
