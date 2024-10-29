@@ -6,11 +6,11 @@ linters:
     - lll
     - gofmt
     - revive
-    - exportloopref
     - unparam
-  disable:
-    - unexported-return
 
 linters-settings:
+  revive:
+    disable:
+      - unexported-return
   lll:
     line-length: 180
