@@ -1,14 +1,22 @@
 package scanner
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
 
-func Scan(currentJSON any) []string {
+var ErrInvalidRoot = errors.New("root JSON value must be an object")
+
+func Scan(currentJSON any) ([]string, error) {
+	root, ok := currentJSON.(map[string]any)
+	if !ok {
+		return nil, ErrInvalidRoot
+	}
+
 	paths := []string{}
 
-	for k, v := range currentJSON.(map[string]any) {
+	for k, v := range root {
 		switch v := v.(type) {
 		case map[string]any:
 			newPaths := scan(v, k)
@@ -18,7 +26,7 @@ func Scan(currentJSON any) []string {
 		}
 	}
 
-	return paths
+	return paths, nil
 }
 
 func scan(currentJSON map[string]any, path string) []string {

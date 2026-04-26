@@ -42,7 +42,8 @@ func TestScan(t *testing.T) {
 		err := json.Unmarshal(testJSON, &currentJSON)
 		require.NoError(t, err)
 
-		paths := Scan(currentJSON)
+		paths, err := Scan(currentJSON)
+		require.NoError(t, err)
 		require.ElementsMatch(t, expected, paths)
 	})
 }

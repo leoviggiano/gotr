@@ -6,8 +6,12 @@ linters:
     - lll
     - gofmt
     - revive
-    - exportloopref
+    - copyloopvar
     - unparam
+
+issues:
+  exclude:
+    - "unexported-return"
 
 linters-settings:
   lll:

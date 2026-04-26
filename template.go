@@ -21,7 +21,7 @@ func newTemplate(data []byte) (template, error) {
 	var tpl template
 	err := json.Unmarshal(data, &tpl)
 	if err != nil {
-		return template{}, fmt.Errorf("%w: %v", errInvalidJSON, err)
+		return template{}, fmt.Errorf("%w: %v - data: %s", errInvalidJSON, err, string(data))
 	}
 
 	if tpl.empty() {
@@ -66,13 +66,17 @@ func (t template) extractValue(data []byte) (string, error) {
 func (t template) apply(args Args) string {
 	var str string
 
-	switch args.Count {
-	case 0:
-		str = fmt.Sprintf(t.None)
-	case 1:
-		str = fmt.Sprintf(t.Singular)
-	default:
-		str = fmt.Sprintf(t.Plural)
+	if args.Count == nil {
+		str = t.Singular
+	} else {
+		switch *args.Count {
+		case 0:
+			str = t.None
+		case 1:
+			str = t.Singular
+		default:
+			str = t.Plural
+		}
 	}
 
 	return args.apply(str)

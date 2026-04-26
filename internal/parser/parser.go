@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"slices"
 	"strings"
 )
 
@@ -15,17 +14,18 @@ var (
 )
 
 func Parse(currentJSON any, mapPath string) ([]byte, error) {
-	currentPath := strings.Split(mapPath, ".")
-	if len(currentPath) == 0 || currentPath[0] == "" {
+	if mapPath == "" {
 		return nil, ErrEmptyPath
 	}
 
-	return parse(currentJSON, mapPath, currentPath[0])
+	pathSlice := strings.Split(mapPath, ".")
+
+	return parse(currentJSON, pathSlice, 0)
 }
 
-func parse(currentJSON any, mapPath, currentPath string) ([]byte, error) {
+func parse(currentJSON any, pathSlice []string, idx int) ([]byte, error) {
 	if currentJSON == nil {
-		return nil, fmt.Errorf("%w: mapPath: %s, currentPath: %s", ErrInvalidPath, mapPath, currentPath)
+		return nil, fmt.Errorf("%w: mapPath: %s, currentPath: %s", ErrInvalidPath, strings.Join(pathSlice, "."), pathSlice[idx])
 	}
 
 	v, ok := currentJSON.(map[string]any)
@@ -33,15 +33,10 @@ func parse(currentJSON any, mapPath, currentPath string) ([]byte, error) {
 		return nil, fmt.Errorf("%w: %v", ErrInvalidType, currentJSON)
 	}
 
-	pathSlice := strings.Split(mapPath, ".")
-	idx := slices.IndexFunc(pathSlice, func(i string) bool {
-		return i == currentPath
-	})
-
 	if idx == len(pathSlice)-1 {
 		selectedJSON := v[pathSlice[idx]]
 		if selectedJSON == nil {
-			return nil, fmt.Errorf("%w: mapPath: %s, currentPath: %s", ErrInvalidPath, mapPath, currentPath)
+			return nil, fmt.Errorf("%w: mapPath: %s, currentPath: %s", ErrInvalidPath, strings.Join(pathSlice, "."), pathSlice[idx])
 		}
 
 		switch v := selectedJSON.(type) {
@@ -52,5 +47,5 @@ func parse(currentJSON any, mapPath, currentPath string) ([]byte, error) {
 		}
 	}
 
-	return parse(v[pathSlice[idx]], mapPath, pathSlice[idx+1])
+	return parse(v[pathSlice[idx]], pathSlice, idx+1)
 }

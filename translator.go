@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"sync"
 
 	"github.com/leoviggiano/gotr/internal/parser"
 	"github.com/leoviggiano/gotr/internal/scanner"
@@ -15,6 +16,7 @@ type Translator interface {
 }
 
 type translator struct {
+	mu                sync.RWMutex
 	defaultIdentifier string
 	templates         map[string]map[string]template
 }
@@ -63,13 +65,21 @@ func (t *translator) Register(identifier, jsonPath string) error {
 		return err
 	}
 
-	jsonTree := scanner.Scan(v)
-
-	translator, ok := t.templates[identifier]
-	if !ok {
-		translator = make(map[string]template)
-		t.templates[identifier] = translator
+	jsonTree, err := scanner.Scan(v)
+	if err != nil {
+		return err
 	}
+
+	t.mu.Lock()
+	defer t.mu.Unlock()
+
+	lang, ok := t.templates[identifier]
+	if !ok {
+		lang = make(map[string]template)
+		t.templates[identifier] = lang
+	}
+
+	isDefault := t.defaultIdentifier == identifier
 
 	for _, path := range jsonTree {
 		k, err := parser.Parse(v, path)
@@ -82,34 +92,48 @@ func (t *translator) Register(identifier, jsonPath string) error {
 			return err
 		}
 
-		translator[path] = tpl
+		lang[path] = tpl
 
-		if t.defaultIdentifier == identifier {
-			translator[tpl.Singular] = tpl
-		}
-
-		defaultTemplate, ok := t.templates[t.defaultIdentifier][path]
-		if ok {
-			translator[defaultTemplate.Singular] = tpl
+		if isDefault {
+			lang[tpl.Singular] = tpl
+			// Backfill non-default identifiers that were registered before the default.
+			for otherID, otherLang := range t.templates {
+				if otherID == identifier {
+					continue
+				}
+				if otherTpl, ok := otherLang[path]; ok {
+					otherLang[tpl.Singular] = otherTpl
+				}
+			}
+		} else {
+			defaultLang, ok := t.templates[t.defaultIdentifier]
+			if ok {
+				if defaultTpl, ok := defaultLang[path]; ok {
+					lang[defaultTpl.Singular] = tpl
+				}
+			}
 		}
 	}
 
 	return nil
 }
 
-// Get the translation by the given path or text and identifier.
+// Get returns the translation for the given path or text and identifier.
 func (t *translator) Get(args Args) string {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+
 	identifiedTranslator, ok := t.templates[args.Identifier]
 	if !ok {
 		return t.defaultGet(args)
 	}
 
-	template, ok := identifiedTranslator[args.Localizer]
+	tpl, ok := identifiedTranslator[args.Localizer]
 	if !ok {
 		return t.defaultGet(args)
 	}
 
-	return template.apply(args)
+	return tpl.apply(args)
 }
 
 func (t *translator) defaultGet(args Args) string {
@@ -118,10 +142,10 @@ func (t *translator) defaultGet(args Args) string {
 		return args.apply(args.Localizer)
 	}
 
-	template, ok := identifiedTranslator[args.Localizer]
+	tpl, ok := identifiedTranslator[args.Localizer]
 	if !ok {
 		return args.apply(args.Localizer)
 	}
 
-	return template.apply(args)
+	return tpl.apply(args)
 }

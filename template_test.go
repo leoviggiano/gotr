@@ -103,7 +103,8 @@ func TestTemplate_apply(t *testing.T) {
 			name:          "none",
 			expectedValue: "John has no Armor.",
 			args: Args{
-				Args: map[string]any{
+				Count: CountOf(0),
+				Vars: map[string]any{
 					"Name": "John",
 				},
 			},
@@ -112,8 +113,8 @@ func TestTemplate_apply(t *testing.T) {
 			name:          "singular",
 			expectedValue: "John has 1 Armor.",
 			args: Args{
-				Count: 1,
-				Args: map[string]any{
+				Count: CountOf(1),
+				Vars: map[string]any{
 					"Name":  "John",
 					"Count": 1,
 				},
@@ -123,8 +124,8 @@ func TestTemplate_apply(t *testing.T) {
 			name:          "plural",
 			expectedValue: "John has 2 Armors.",
 			args: Args{
-				Count: 2,
-				Args: map[string]any{
+				Count: CountOf(2),
+				Vars: map[string]any{
 					"Name":  "John",
 					"Count": 2,
 				},
