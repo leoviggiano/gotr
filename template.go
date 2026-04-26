@@ -66,13 +66,17 @@ func (t template) extractValue(data []byte) (string, error) {
 func (t template) apply(args Args) string {
 	var str string
 
-	switch args.Count {
-	case 0:
-		str = t.None
-	case 1:
+	if args.Count == nil {
 		str = t.Singular
-	default:
-		str = t.Plural
+	} else {
+		switch *args.Count {
+		case 0:
+			str = t.None
+		case 1:
+			str = t.Singular
+		default:
+			str = t.Plural
+		}
 	}
 
 	return args.apply(str)

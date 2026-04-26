@@ -23,37 +23,37 @@ func main() {
 	argsPTArmorDescription := gotr.Args{
 		Identifier: "pt",
 		Localizer:  "items.equipments.armor.description",
-		Args: map[string]any{
+		Vars: map[string]any{
 			"Name":  "John",
 			"Count": 10,
 		},
-		Count: 10,
+		Count: gotr.CountOf(10),
 	}
 
 	argsPTArmorText := gotr.Args{
 		Identifier: "pt",
 		Localizer:  "items.equipments.armor",
-		Args: map[string]any{
+		Vars: map[string]any{
 			"Name":  "John",
 			"Count": 10,
 		},
-		Count: 10,
+		Count: gotr.CountOf(10),
 	}
 
 	argsPTArmorFullText := gotr.Args{
 		Identifier: "pt",
 		Localizer:  "{{.Name}} has {{.Count}} Armor.",
-		Args: map[string]any{
+		Vars: map[string]any{
 			"Name":  "John",
 			"Count": 10,
 		},
-		Count: 10,
+		Count: gotr.CountOf(10),
 	}
 
 	argsPTText2 := gotr.Args{
 		Identifier: "pt",
 		Localizer:  "hello_world",
-		Count:      1,
+		Count:      gotr.CountOf(1),
 	}
 
 	fmt.Println(translator.Get(argsPTArmorText))

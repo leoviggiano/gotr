@@ -14,8 +14,7 @@ var (
 )
 
 func Parse(currentJSON any, mapPath string) ([]byte, error) {
-	currentPath := strings.Split(mapPath, ".")
-	if len(currentPath) == 0 || currentPath[0] == "" {
+	if mapPath == "" {
 		return nil, ErrEmptyPath
 	}
 
