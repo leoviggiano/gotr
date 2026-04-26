@@ -97,8 +97,8 @@ func (t *translator) Register(identifier, jsonPath string) error {
 		if isDefault {
 			lang[tpl.Singular] = tpl
 			// Backfill non-default identifiers that were registered before the default.
-			for otherId, otherLang := range t.templates {
-				if otherId == identifier {
+			for otherID, otherLang := range t.templates {
+				if otherID == identifier {
 					continue
 				}
 				if otherTpl, ok := otherLang[path]; ok {

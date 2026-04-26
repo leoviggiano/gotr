@@ -6,7 +6,7 @@ linters:
     - lll
     - gofmt
     - revive
-    - exportloopref
+    - copyloopvar
     - unparam
 
 issues:
